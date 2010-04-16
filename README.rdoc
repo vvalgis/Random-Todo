@@ -1,0 +1,2 @@
+=Random Todo
+Todo app for those, who can't make decision about "What next task i need to do?"
