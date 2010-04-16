@@ -1,4 +1,4 @@
-%p(class="task" id="task_#{task.id}")
+%div(class="task" id="task_#{task.id}")
   = Task.urgencies[(task.urgency ? 1 : 0 )]
   %span= task.essence
   %br/
@@ -9,3 +9,12 @@
     .manage_links
       = link_to 'Edit', edit_task_path(task)
       = link_to 'Destroy', task, :confirm => 'Are you sure?', :method => :delete
+  - elsif %w(finished).include?(action_name)
+    .manage_links
+      = link_to 'Restore', restore_task_path(task), :method => :put
+  - elsif %w(dashboard).include?(action_name) && task.in_progress
+    .manage_links
+      = link_to 'Done', i_have_done_task_path(task), :confirm => 'Are you really done with that?', :method => :put
+  - elsif %w(dashboard next).include?(action_name) && !task.in_progress
+    .manage_links
+      = link_to 'Do it', i_will_do_task_path(task), :method => :put

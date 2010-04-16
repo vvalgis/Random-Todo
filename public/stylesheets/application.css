@@ -91,6 +91,18 @@ a {
         font-weight: bold;
         color: #dbd925; }
 
+h1 a, h2 a, h3 a, h4 a {
+  color: #962323; }
+
+h2.current a {
+  color: #962323; }
+
+h3.not_finished a {
+  color: #db4f30; }
+
+h3.finished a {
+  color: #bbb905; }
+
 .task {
   margin-bottom: 15px; }
   .task span {

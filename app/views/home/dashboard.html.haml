@@ -1,22 +1,27 @@
-- if @task
-  - if @task.in_progress
-    - title 'Currently you hardly working on'
-    = render @task
-    Are you
-    = link_to 'done', i_have_done_task_path(@task), :confirm => 'Are you really done with that?', :method => :put
-    already?
-  - else
-    - title 'Make your choice! Pick a task!'
-    = render @task
-    Will you
-    = link_to 'do', i_will_do_task_path(@task), :confirm => 'Are you sure?', :method => :put
-    it?
+%h2.current
+  = link_to 'Current task is', next_tasks_path, :remote => true
+%div.next_task
+
+%h3.not_finished
+  = link_to "Not finished yet (#{@in_progress_count})", in_progress_tasks_path, :remote => true
+%div.in_progress
 
 - unless @tasks_finished.empty?
-  %h2 Recently finished tasks
-  %ul
-    - for task in @tasks_finished
-      %li= h(task.essence)
+  %h3.finished
+    = link_to "Recently finished tasks (#{@finished_count})", '', { :class => 'recent_toggle' }
+  %div.recent_tasks{:style => 'display:none;'}
+    %ul
+      - for task in @tasks_finished
+        %li
+          = h(task.essence)
+          = link_to 'Restore', restore_task_path(task), :method => :put
 
-  %p= link_to 'See all finished tasks', finished_tasks_path
-    
+    %p= link_to 'See all finished tasks', finished_tasks_path
+
+:javascript
+  $(function(){
+    $('a.recent_toggle').click(function(){
+      $('.recent_tasks').toggle();
+      return false;
+    })
+  });

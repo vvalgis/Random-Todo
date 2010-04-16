@@ -1,4 +1,5 @@
 !base_color = #dbd925
+!dark_base_color = #bbb905
 !sub_base_color = #fcff68
 !bright_accent_color = #ff8d2c
 !accent_color = #db4f30
@@ -100,7 +101,19 @@ a
       a
         :font
           :weight bold
-        :color = !base_color  
+        :color = !base_color
+h1, h2, h3, h4
+  a
+    :color = !dark_accent_color
+h2.current
+  a
+    :color = !dark_accent_color
+h3.not_finished
+  a
+    :color = !accent_color
+h3.finished
+  a
+    :color = !dark_base_color
 
 .task
   :margin-bottom 15px

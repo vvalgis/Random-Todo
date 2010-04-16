@@ -1,10 +1,42 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.is_waiting
+    @tasks = Task.is_waiting.order('updated_at DESC') 
   end
   
   def finished
     @tasks = Task.has_done
+  end
+  
+  def next
+    @task = Task.urgent.for_current_daypart.not_in_progress.rand
+    unless @task
+      @task = Task.urgent.not_in_progress.rand
+      unless @task
+        @task = Task.for_current_daypart.not_in_progress.rand
+        unless @task
+          @task = Task.for_any_daypart.is_waiting.not_in_progress.rand
+        end
+      end
+    end
+    respond_to do |format|
+      format.js
+    end    
+  end
+  
+  def in_progress
+    @task = Task.urgent.for_current_daypart.in_progress.rand
+    unless @task
+      @task = Task.urgent.in_progress.rand
+      unless @task
+        @task = Task.for_current_daypart.in_progress.rand
+        unless @task
+          @task = Task.for_any_daypart.is_waiting.in_progress.rand
+        end
+      end
+    end
+    respond_to do |format|
+      format.js
+    end    
   end
   
   def show
@@ -58,7 +90,17 @@ class TasksController < ApplicationController
     end
     redirect_to root_path
   end
-  
+
+  def restore
+    @task = Task.find(params[:id])
+    if @task.update_attributes(:in_progress => false, :is_done => false)
+      flash[:notice] = "Successfully updated task."
+    else
+      flash[:error] = "Something goes wrong."
+    end
+    redirect_to root_path
+  end
+
   def destroy
     @task = Task.find(params[:id])
     @task.destroy
