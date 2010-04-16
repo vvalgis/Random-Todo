@@ -1,0 +1,19 @@
+- form_for @task do |f|
+  = f.error_messages
+  %p
+    = f.label :essence
+    %br
+    = f.text_field :essence
+  %p
+    = f.label :duration
+    %br
+    = f.select :duration, Task.durations(true)
+  %p
+    = f.label :daypart
+    %br
+    = f.select :daypart, Task.dayparts(true)
+  %p
+    = f.check_box :urgency
+    = f.label :urgency, 'Certainly today?'
+  %p
+    = f.submit "Save"

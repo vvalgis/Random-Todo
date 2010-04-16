@@ -1,0 +1,30 @@
+!!! Strict
+%html{html_attrs}
+  
+  %head
+    %title
+      = h(yield(:title) || "Untitled")
+    %meta{"http-equiv"=>"Content-Type", :content=>"text/html; charset=utf-8"}/
+    = csrf_meta_tag
+    = stylesheet_link_tag 'application'
+    = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js' 
+    = javascript_include_tag 'rails'
+
+    = yield(:head)
+  
+  %body
+    #container
+      - flash.each do |name, msg|
+        = content_tag :div, msg, :id => "flash_#{name}"
+      #header
+        %div.logo Random ToDo List
+        = render :partial => 'layouts/navigation'
+        -#= render :partial => 'home/color'
+        
+
+        
+      
+      - if show_title?
+        %h1= yield(:title)
+      
+      = yield

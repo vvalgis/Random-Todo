@@ -1,0 +1,11 @@
+%p(class="task" id="task_#{task.id}")
+  = Task.urgencies[(task.urgency ? 1 : 0 )]
+  %span= task.essence
+  %br/
+  = "it will take #{Task.durations[task.duration]}"
+  %br/
+  = "and the best time for that is #{Task.dayparts[task.daypart]}"
+  - if %w(index show).include?(action_name)
+    .manage_links
+      = link_to 'Edit', edit_task_path(task)
+      = link_to 'Destroy', task, :confirm => 'Are you sure?', :method => :delete

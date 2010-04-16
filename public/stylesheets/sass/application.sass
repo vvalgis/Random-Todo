@@ -1,0 +1,109 @@
+!base_color = #dbd925
+!sub_base_color = #fcff68
+!bright_accent_color = #ff8d2c
+!accent_color = #db4f30
+!dark_accent_color = #962323
+!font_base_color = #000
+
+body
+  :background-color = #fff
+  :font
+    :family Verdana, Helvetica, Arial
+    :size 14px
+
+a
+  :color = !bright_accent_color
+  img
+    :border none
+
+.clear
+  :clear both
+  :height 0
+  :overflow hidden
+
+#container
+  :width 75%
+  :margin 0 auto
+  :background = !sub_base_color
+  :padding 20px 40px
+  :border solid 1px black
+  :margin-top 20px
+  :color = !dark_accent_color
+
+#flash_notice,
+#flash_error
+  :padding 5px 8px
+  :margin 10px 0
+
+#flash_notice
+  :background-color #CFC
+  :border solid 1px #6C6
+
+#flash_error
+  :background-color #FCC
+  :border solid 1px #C66
+
+.fieldWithErrors
+  :display inline
+
+#errorExplanation
+  :width 400px
+  :border 2px solid #CF0000
+  :padding 0
+  :padding-bottom 12px
+  :margin-bottom 20px
+  :background-color #f0f0f0
+  h2
+    :text-align left
+    :padding 5px 5px 5px 15px
+    :margin 0
+    :font
+      :weight bold
+      :size 12px
+    :background-color #c00
+    :color #fff
+  p
+    :color #333
+    :margin-bottom 0
+    :padding 8px
+  ul
+    :margin 2px 24px
+    li
+      :font-size 12px
+      :list-style disc
+
+/* Style */
+.logo
+  :font
+    :size 2em
+    :weight bold
+  :color = !accent_color
+  :float left
+  :background-color = !base_color
+  :padding 10px
+
+.navigation
+  :width 300px
+  :margin 0
+  :padding 0
+  :margin-left auto
+  ul
+    :padding 0
+    :margin 0
+    li
+      :display inline-block
+      :width auto
+      :height 20px
+      :background-color = !dark_accent_color
+      :padding 10px
+      :margin 0
+      a
+        :font
+          :weight bold
+        :color = !base_color  
+
+.task
+  :margin-bottom 15px
+  span
+    :font
+      :weight bold

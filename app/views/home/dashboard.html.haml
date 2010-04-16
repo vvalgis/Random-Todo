@@ -1,0 +1,22 @@
+- if @task
+  - if @task.in_progress
+    - title 'Currently you hardly working on'
+    = render @task
+    Are you
+    = link_to 'done', i_have_done_task_path(@task), :confirm => 'Are you really done with that?', :method => :put
+    already?
+  - else
+    - title 'Make your choice! Pick a task!'
+    = render @task
+    Will you
+    = link_to 'do', i_will_do_task_path(@task), :confirm => 'Are you sure?', :method => :put
+    it?
+
+- unless @tasks_finished.empty?
+  %h2 Recently finished tasks
+  %ul
+    - for task in @tasks_finished
+      %li= h(task.essence)
+
+  %p= link_to 'See all finished tasks', finished_tasks_path
+    
