@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.0.beta3'
+gem 'rails', '3.0.0.beta'
 gem 'bundler', '0.9.14'
 
 # Bundle edge Rails instead:
