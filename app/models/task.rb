@@ -8,9 +8,10 @@ class Task < ActiveRecord::Base
   scope :urgent, lambda { where(:urgency => true, :is_done => false) }
   scope :for_current_daypart, lambda { where(:daypart => current_daypart) }
   scope :for_any_daypart, lambda { where(:daypart => 0) }
+  scope :in_time, lambda { |free_time| where(['duration <= ?', free_time]) }
   
   def Task.durations(for_select = false)
-    d = { 0 => 'more than 3 hours', 15 => 'less than 15 minutes', 60 => 'less than 1 hour', 180 => 'less than 3 hours'}
+    d = {15 => 'less than 15 minutes', 60 => 'less than 1 hour', 180 => 'less than 3 hours', 360 => 'more than 3 hours'}
     for_select ? d.invert.to_a.sort : d
   end
   

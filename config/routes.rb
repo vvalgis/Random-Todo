@@ -12,6 +12,7 @@ RandomTodo::Application.routes.draw do |map|
     end
   end
   
+  match 'set_free_time' => 'home#set_free_time'
   root :to => 'home#dashboard'
   # The priority is based upon order of creation:
   # first created -> highest priority.

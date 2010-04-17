@@ -1,3 +1,9 @@
+%div
+  I have about
+  = form_tag set_free_time_path, :remote => true, :class => 'time_form' do
+    = select_tag :time, options_for_select(Task.durations.invert.sort, session[:free_time].to_i)
+    = submit_tag "Save"
+  of free time
 %h2.current
   = link_to 'Current task is', next_tasks_path, :remote => true
 %div.next_task

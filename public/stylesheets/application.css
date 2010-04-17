@@ -64,6 +64,18 @@ a {
       list-style: disc; }
 
 /* Style */
+#header {
+  overflow: hidden;
+  margin-bottom: 15px; }
+
+.clearfix:after {
+  content: '.';
+  display: block;
+  clear: both;
+  font: 0/0 a;
+  height: 0;
+  visibility: hidden; }
+
 .logo {
   font-size: 2em;
   font-weight: bold;
@@ -102,6 +114,9 @@ h3.not_finished a {
 
 h3.finished a {
   color: #bbb905; }
+
+form.time_form {
+  display: inline; }
 
 .task {
   margin-bottom: 15px; }

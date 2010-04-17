@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  before_filter :check_free_time
   def index
     @tasks = Task.is_waiting.order('updated_at DESC') 
   end
@@ -8,34 +9,34 @@ class TasksController < ApplicationController
   end
   
   def next
-    @task = Task.urgent.for_current_daypart.not_in_progress.rand
+    @task = Task.urgent.for_current_daypart.not_in_progress.in_time(@free_time).rand
     unless @task
-      @task = Task.urgent.not_in_progress.rand
+      @task = Task.urgent.not_in_progress.in_time(@free_time).rand
       unless @task
-        @task = Task.for_current_daypart.not_in_progress.rand
+        @task = Task.for_current_daypart.not_in_progress.in_time(@free_time).rand
         unless @task
-          @task = Task.for_any_daypart.is_waiting.not_in_progress.rand
+          @task = Task.for_any_daypart.is_waiting.not_in_progress.in_time(@free_time).rand
         end
       end
     end
     respond_to do |format|
-      format.js
+      format.js { render :task, :locals => { :update => :next_task }}
     end    
   end
   
   def in_progress
-    @task = Task.urgent.for_current_daypart.in_progress.rand
+    @task = Task.urgent.for_current_daypart.in_progress.in_time(@free_time).rand
     unless @task
-      @task = Task.urgent.in_progress.rand
+      @task = Task.urgent.in_progress.in_time(@free_time).rand
       unless @task
-        @task = Task.for_current_daypart.in_progress.rand
+        @task = Task.for_current_daypart.in_progress.in_time(@free_time).rand
         unless @task
-          @task = Task.for_any_daypart.is_waiting.in_progress.rand
+          @task = Task.for_any_daypart.is_waiting.in_progress.in_time(@free_time).rand
         end
       end
     end
     respond_to do |format|
-      format.js
+      format.js { render :task, :locals => { :update => :in_progress }}
     end    
   end
   
@@ -107,4 +108,10 @@ class TasksController < ApplicationController
     flash[:notice] = "Successfully destroyed task."
     redirect_to tasks_url
   end
+  
+  private
+    def check_free_time
+      @free_time = (session[:free_time] ||= 15).to_i
+    end
+  
 end
