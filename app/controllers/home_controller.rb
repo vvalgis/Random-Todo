@@ -8,7 +8,7 @@ class HomeController < ApplicationController
   
   def set_free_time
     session[:free_time] = params[:time]
-    render :partial => 'shared/flash', :locals => {:name => :notice, :msg => 'Amount of your free time is remembered'}
+    render :partial => 'shared/flash', :locals => {:name => :notice, :msg => 'Amount of task time is remembered'}
   end
 
 end
