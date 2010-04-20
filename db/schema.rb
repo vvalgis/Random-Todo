@@ -9,17 +9,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100416050204) do
+ActiveRecord::Schema.define(:version => 20100420222435) do
 
   create_table "tasks", :force => true do |t|
-    t.string   "essence",     :default => "Do something weird immediately!"
-    t.integer  "duration",    :default => 15
-    t.integer  "daypart",     :default => 0
-    t.boolean  "urgency",     :default => false
-    t.boolean  "is_done",     :default => false
+    t.string   "essence",    :default => "Do something immediately!"
+    t.integer  "duration",   :default => 15
+    t.integer  "daypart",    :default => 0
+    t.boolean  "urgency",    :default => false
+    t.integer  "status",     :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "in_progress", :default => false
   end
 
 end

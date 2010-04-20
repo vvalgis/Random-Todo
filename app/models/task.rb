@@ -1,11 +1,18 @@
 class Task < ActiveRecord::Base
-  attr_accessible :essence, :duration, :daypart, :urgency, :is_done, :in_progress
   
-  scope :in_progress, lambda { where(:in_progress => true) }
-  scope :not_in_progress, lambda { where(:in_progress => false) }
-  scope :has_done, where(:is_done => true).order('updated_at DESC')
-  scope :is_waiting, lambda { where(:is_done => false) }
-  scope :urgent, lambda { where(:urgency => true, :is_done => false) }
+  WAITING = 1
+  IN_PROGRESS = 2
+  DELAYED = 4
+  DONE = 8
+  
+  attr_accessible :essence, :duration, :daypart, :urgency, :status
+  
+  scope :delayed, lambda { where(:status => Task::DELAYED) }
+  scope :in_progress, lambda { where(:status => Task::IN_PROGRESS).limit(1) }
+  #scope :not_in_progress, lambda { where(:in_progress => false) }
+  scope :has_done, where(:status => Task::DONE).order('updated_at DESC')
+  scope :is_waiting, lambda { where(:status => Task::WAITING) }
+  scope :urgent, lambda { where(:urgency => true) }
   scope :for_current_daypart, lambda { where(:daypart => current_daypart) }
   scope :for_any_daypart, lambda { where(:daypart => 0) }
   scope :in_time, lambda { |free_time| where(['duration <= ?', free_time]) }
@@ -21,7 +28,7 @@ class Task < ActiveRecord::Base
   end
   
   def Task.urgencies(for_select = false)
-    u = { 0 => 'Not certainly today', 1 => 'Certainly today'}
+    u = { 0 => '', 1 => 'Certainly today'}
     for_select ? u.invert.to_a : u
   end
   

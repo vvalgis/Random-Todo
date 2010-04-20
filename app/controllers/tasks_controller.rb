@@ -1,6 +1,7 @@
 class TasksController < ApplicationController
-  before_filter :check_free_time
+  before_filter :check_free_time, :only => [ :next, :next_delayed ]
   def index
+    #@tasks = Task.where('status = ? OR status = ?', Task::WAITING, Task::DELAYED).order('updated_at DESC') 
     @tasks = Task.is_waiting.order('updated_at DESC') 
   end
   
@@ -8,34 +9,53 @@ class TasksController < ApplicationController
     @tasks = Task.has_done
   end
   
+  def delayed
+    @tasks = Task.delayed.order('updated_at DESC')
+    render :index
+  end
+  
   def next
-    @task = Task.urgent.for_current_daypart.not_in_progress.in_time(@free_time).rand
+    @task = Task.urgent.for_current_daypart.is_waiting.in_time(@free_time).rand
     unless @task
-      @task = Task.urgent.not_in_progress.in_time(@free_time).rand
+      @task = Task.urgent.is_waiting.in_time(@free_time).rand
       unless @task
-        @task = Task.for_current_daypart.not_in_progress.in_time(@free_time).rand
+        @task = Task.for_current_daypart.is_waiting.in_time(@free_time).rand
         unless @task
-          @task = Task.for_any_daypart.is_waiting.not_in_progress.in_time(@free_time).rand
+          @task = Task.for_any_daypart.is_waiting.in_time(@free_time).rand
         end
       end
     end
+    if @task
+      Task.update_all({:status => Task::DELAYED}, {:status => Task::IN_PROGRESS})
+      @task.update_attribute(:status, Task::IN_PROGRESS)
+    else
+      flash[:notice] = 'No tasks affordable to your amount of time'
+    end
     respond_to do |format|
+      format.html { redirect_to :root }
       format.js { render :task, :locals => { :update => :next_task }}
     end    
   end
   
-  def in_progress
-    @task = Task.urgent.for_current_daypart.in_progress.in_time(@free_time).rand
+  def next_delayed
+    @task = Task.urgent.for_current_daypart.delayed.in_time(@free_time).rand
     unless @task
-      @task = Task.urgent.in_progress.in_time(@free_time).rand
+      @task = Task.urgent.delayed.in_time(@free_time).rand
       unless @task
-        @task = Task.for_current_daypart.in_progress.in_time(@free_time).rand
+        @task = Task.for_current_daypart.delayed.in_time(@free_time).rand
         unless @task
-          @task = Task.for_any_daypart.is_waiting.in_progress.in_time(@free_time).rand
+          @task = Task.for_any_daypart.delayed.in_time(@free_time).rand
         end
       end
     end
+    if @task
+      Task.update_all({:status => Task::DELAYED}, {:status => Task::IN_PROGRESS})
+      @task.update_attribute(:status, Task::IN_PROGRESS)
+    else
+      flash[:notice] = 'No tasks affordable to your amount of time'
+    end
     respond_to do |format|
+      format.html { redirect_to :root }
       format.js { render :task, :locals => { :update => :in_progress }}
     end    
   end
@@ -74,7 +94,7 @@ class TasksController < ApplicationController
   
   def i_have_done
     @task = Task.find(params[:id])
-    if @task.update_attributes(:in_progress => false, :is_done => true)
+    if @task.update_attribute(:status, Task::DONE)
       flash[:notice] = "Successfully updated task."
     else
       flash[:error] = "Something goes wrong."
@@ -82,9 +102,9 @@ class TasksController < ApplicationController
     redirect_to root_path
   end
   
-  def i_will_do
+  def delay
     @task = Task.find(params[:id])
-    if @task.update_attributes(:in_progress => true)
+    if @task.update_attribute(:status, Task::DELAYED)
       flash[:notice] = "Successfully updated task."
     else
       flash[:error] = "Something goes wrong."
@@ -94,12 +114,16 @@ class TasksController < ApplicationController
 
   def restore
     @task = Task.find(params[:id])
-    if @task.update_attributes(:in_progress => false, :is_done => false)
+    if @task.update_attribute(:status, Task::WAITING)
       flash[:notice] = "Successfully updated task."
     else
       flash[:error] = "Something goes wrong."
     end
-    redirect_to root_path
+    @finished_count = Task.has_done.count
+    respond_to do |format|
+      format.html { redirect_to finished_tasks_path }
+      format.js
+    end
   end
 
   def destroy

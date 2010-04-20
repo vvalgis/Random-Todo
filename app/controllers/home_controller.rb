@@ -1,8 +1,9 @@
 class HomeController < ApplicationController
   def dashboard
+    @current_task = Task.in_progress.first
     @tasks_finished = Task.has_done.limit(7)
     @finished_count = Task.has_done.count
-    @in_progress_count = Task.is_waiting.in_progress.count
+    @delayed_count = Task.delayed.count
   end
   
   def set_free_time

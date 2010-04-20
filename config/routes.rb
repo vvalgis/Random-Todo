@@ -1,14 +1,15 @@
 RandomTodo::Application.routes.draw do |map|
   resources :tasks do
     member do
-      put :i_will_do
+      put :delay
       put :i_have_done  
       put :restore
     end
     collection do
       get :finished
       get :next
-      get :in_progress 
+      get :next_delayed 
+      get :delayed 
     end
   end
   
