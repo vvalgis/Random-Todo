@@ -9,7 +9,7 @@ gem 'sqlite3-ruby', :require => 'sqlite3', :group => :development
 gem 'haml'
 
 group :development do
-  gem 'nifty-generators', :git => 'git://github.com/ryanb/nifty-generators.git', :branch => 'rails3'
+#  gem 'nifty-generators', :git => 'git://github.com/ryanb/nifty-generators.git', :branch => 'rails3'
 end
 
 # Use unicorn as the web server
