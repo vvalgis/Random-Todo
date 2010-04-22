@@ -7,7 +7,10 @@ gem 'rails', '3.0.0.beta3'
 # gem "pg", :group => :production
 gem 'sqlite3-ruby', :require => 'sqlite3', :group => :development
 gem 'haml'
-gem 'nifty-generators', :git => 'git://github.com/ryanb/nifty-generators.git', :branch => 'rails3'
+
+group :development do
+  gem 'nifty-generators', :git => 'git://github.com/ryanb/nifty-generators.git', :branch => 'rails3'
+end
 
 # Use unicorn as the web server
 # gem 'unicorn'
