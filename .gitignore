@@ -4,3 +4,5 @@ log/*.log
 tmp/**/*
 doc/api
 doc/app
+Capfile
+config/deploy.rb
