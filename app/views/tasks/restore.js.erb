@@ -1,0 +1,7 @@
+<%= render 'shared/flash', :name => :notice, :msg => "Task \"#{@task.essence}\" is restored"%>
+$('#task_<%= @task.id %>').remove();
+$('.recent_toggle').replaceWith('<%= link_to "Recently finished tasks (#{@finished_count})", '', { :class => 'recent_toggle' } %>')
+<% if @finished_count <= 0 %>
+$('.finished').remove();
+$('.recent_tasks').remove();
+<% end %>

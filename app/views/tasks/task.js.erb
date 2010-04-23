@@ -1,0 +1,5 @@
+<% if @task %>
+$('div.<%= update %>').html("<%= escape_javascript(render(@task)) %>");
+<% else %>
+<%= render 'shared/flash', :name => :notice, :msg => 'No tasks affordable to your amount of time'%>
+<% end %>
