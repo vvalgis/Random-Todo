@@ -16,6 +16,14 @@
     #container
       - flash.each do |name, msg|
         = content_tag :div, msg, :id => "flash_#{name}"
+      #user_bar.clearfix
+        - if user_signed_in?
+          = "You are #{current_user.name},"
+          = link_to 'Sign out', destroy_user_session_path
+        - else
+          = link_to 'Sign in', new_user_session_path
+          or
+          = link_to 'Sign up', new_user_registration_path
       #header.clearfix
         %div.logo Random ToDo List
         = render :partial => 'layouts/navigation'

@@ -1,32 +1,33 @@
 class TasksController < ApplicationController
   before_filter :check_free_time, :only => [ :next, :next_delayed ]
+  before_filter :authenticate_user! 
   def index
     #@tasks = Task.where('status = ? OR status = ?', Task::WAITING, Task::DELAYED).order('updated_at DESC') 
-    @tasks = Task.is_waiting.order('updated_at DESC') 
+    @tasks = current_user.tasks.is_waiting.order('updated_at DESC') 
   end
   
   def finished
-    @tasks = Task.has_done
+    @tasks = current_user.tasks.has_done
   end
   
   def delayed
-    @tasks = Task.delayed.order('updated_at DESC')
+    @tasks = current_user.tasks.delayed.order('updated_at DESC')
     render :index
   end
   
   def next
-    @task = Task.urgent.for_current_daypart.is_waiting.in_time(@free_time).rand
+    @task = current_user.tasks.urgent.for_current_daypart.is_waiting.in_time(@free_time).rand
     unless @task
-      @task = Task.urgent.is_waiting.in_time(@free_time).rand
+      @task = current_user.tasks.urgent.is_waiting.in_time(@free_time).rand
       unless @task
-        @task = Task.for_current_daypart.is_waiting.in_time(@free_time).rand
+        @task = current_user.tasks.for_current_daypart.is_waiting.in_time(@free_time).rand
         unless @task
-          @task = Task.for_any_daypart.is_waiting.in_time(@free_time).rand
+          @task = current_user.tasks.for_any_daypart.is_waiting.in_time(@free_time).rand
         end
       end
     end
     if @task
-      Task.update_all({:status => Task::DELAYED}, {:status => Task::IN_PROGRESS})
+      Task.update_all({:status => Task::DELAYED}, {:user_id => current_user.id, :status => Task::IN_PROGRESS})
       @task.update_attribute(:status, Task::IN_PROGRESS)
     else
       flash[:notice] = 'No tasks affordable to your amount of time'
@@ -38,18 +39,18 @@ class TasksController < ApplicationController
   end
   
   def next_delayed
-    @task = Task.urgent.for_current_daypart.delayed.in_time(@free_time).rand
+    @task = current_user.tasks.urgent.for_current_daypart.delayed.in_time(@free_time).rand
     unless @task
-      @task = Task.urgent.delayed.in_time(@free_time).rand
+      @task = current_user.tasks.urgent.delayed.in_time(@free_time).rand
       unless @task
-        @task = Task.for_current_daypart.delayed.in_time(@free_time).rand
+        @task = current_user.tasks.for_current_daypart.delayed.in_time(@free_time).rand
         unless @task
-          @task = Task.for_any_daypart.delayed.in_time(@free_time).rand
+          @task = current_user.tasks.for_any_daypart.delayed.in_time(@free_time).rand
         end
       end
     end
     if @task
-      Task.update_all({:status => Task::DELAYED}, {:status => Task::IN_PROGRESS})
+      Task.update_all({:status => Task::DELAYED}, {:user_id => current_user.id, :status => Task::IN_PROGRESS})
       @task.update_attribute(:status, Task::IN_PROGRESS)
     else
       flash[:notice] = 'No tasks affordable to your amount of time'
@@ -69,7 +70,7 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(params[:task])
+    @task = current_user.tasks.build(params[:task])
     if @task.save
       flash[:notice] = "Successfully created task."
       redirect_to tasks_url
@@ -119,7 +120,7 @@ class TasksController < ApplicationController
     else
       flash[:error] = "Something goes wrong."
     end
-    @finished_count = Task.has_done.count
+    @finished_count = current_user.tasks.has_done.count
     respond_to do |format|
       format.html { redirect_to finished_tasks_path }
       format.js

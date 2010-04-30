@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-UNICORN_RAILS="/usr/bin/unicorn_rails".freeze
+UNICORN_RAILS="/usr/bin/unicorn".freeze
 APP_PATH="/home/lort/www/Random-Todo/current/".freeze
 
 class Runner

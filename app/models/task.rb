@@ -7,6 +7,8 @@ class Task < ActiveRecord::Base
   
   attr_accessible :essence, :duration, :daypart, :urgency, :status
   
+  belongs_to :user
+  
   scope :delayed, lambda { where(:status => Task::DELAYED) }
   scope :in_progress, lambda { where(:status => Task::IN_PROGRESS).limit(1) }
   #scope :not_in_progress, lambda { where(:in_progress => false) }

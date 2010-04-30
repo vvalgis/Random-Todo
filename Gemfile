@@ -7,6 +7,7 @@ gem 'rails', '3.0.0.beta3'
 # gem "pg", :group => :production
 gem 'sqlite3-ruby', :require => 'sqlite3', :group => :development
 gem 'haml'
+gem 'devise', '1.1.rc1'
 
 group :development do
 #  gem 'nifty-generators', :git => 'git://github.com/ryanb/nifty-generators.git', :branch => 'rails3'

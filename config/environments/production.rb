@@ -39,4 +39,5 @@ RandomTodo::Application.configure do
 
   # Enable threaded mode
   # config.threadsafe!
+  config.action_mailer.default_url_options = { :host => 'random-todo.home.valgis.ru' }
 end
